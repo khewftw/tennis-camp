@@ -1,26 +1,103 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: #000000;
+  --color-ball: #e3f339;
+  --color-court: #2350e8;
+  --color-clay: #d4572b;
+  --color-chalk: #f6f5ee;
+  --color-line: #ffffff;
+
+  --font-display: var(--font-bounded);
+  --font-sans: var(--font-product-sans);
+
+  --text-h1: clamp(2.35rem, 6.8vw, 5.5rem);
+  --text-h1--line-height: 0.92;
+  --text-h1--letter-spacing: -0.04em;
+  --text-h1--font-weight: 800;
+
+  --text-h2: clamp(2rem, 4.8vw, 4rem);
+  --text-h2--line-height: 0.95;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 800;
+
+  --text-h3: clamp(1.25rem, 2vw, 1.75rem);
+  --text-h3--line-height: 0.95;
+  --text-h3--letter-spacing: -0.02em;
+  --text-h3--font-weight: 700;
+
+  --text-lead: 20px;
+  --text-lead--line-height: 1.5;
+  --text-lead--font-weight: 500;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.55;
+  --text-body--font-weight: 400;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.45;
+  --text-small--font-weight: 400;
+
+  --text-nav: 19px;
+  --text-nav--line-height: 20px;
+  --text-nav--letter-spacing: 0;
+  --text-nav--font-weight: 500;
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 46s linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  color: var(--color-line);
+  font-family: var(--font-product-sans), sans-serif;
+  hyphens: manual;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-bounded), sans-serif;
+  text-transform: uppercase;
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
