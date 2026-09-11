@@ -10,7 +10,6 @@ import { Header } from "@/src/components/sections/Header";
 import { Hero } from "@/src/components/sections/Hero";
 import { How } from "@/src/components/sections/How";
 import { Marquee } from "@/src/components/sections/Marquee";
-import { MobileCta } from "@/src/components/sections/MobileCta";
 import { News } from "@/src/components/sections/News";
 import { Prices } from "@/src/components/sections/Prices";
 import { Progress } from "@/src/components/sections/Progress";
@@ -40,7 +39,6 @@ export default function Home() {
         <Signup />
       </main>
       <Footer />
-      <MobileCta />
       <CookieBanner />
     </>
   );

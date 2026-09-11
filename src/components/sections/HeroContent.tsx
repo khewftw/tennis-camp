@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { site } from "@/src/content/site";
 import { Button } from "@/src/components/ui/Button";
 import { pageGutter } from "@/src/components/ui/Container";
-import { HeroFacts } from "@/src/components/sections/HeroFacts";
 
 export function HeroContent() {
   const reduceMotion = useReducedMotion();
@@ -15,7 +14,7 @@ export function HeroContent() {
   return (
     <div className="pointer-events-none absolute inset-0 z-20">
       <div
-        className={`pointer-events-auto flex h-full w-full flex-col items-center justify-center ${pageGutter} pt-[72px] pb-24 text-center md:pt-[96px] md:pb-28`}
+        className={`pointer-events-auto flex h-full w-full flex-col items-center justify-center ${pageGutter} pt-[72px] pb-8 text-center md:pt-[96px] md:pb-12`}
       >
         <h1 className="max-w-[18ch] text-[clamp(1.7rem,8.4vw,5.5rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] text-ball">
           {site.hero.titleLines.map((line, index) => (
@@ -60,10 +59,6 @@ export function HeroContent() {
             {site.hero.secondaryCta.label}
           </Button>
         </motion.div>
-
-        <div className="[@media(max-height:680px)]:hidden">
-          <HeroFacts />
-        </div>
       </div>
     </div>
   );

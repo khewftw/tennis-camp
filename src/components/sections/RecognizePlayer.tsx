@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { site } from "@/src/content/site";
+import { motionEase, motionViewport } from "@/src/components/ui/Reveal";
 
 function PlayerFade() {
   return (
@@ -12,11 +16,18 @@ function PlayerFade() {
 
 export function RecognizePlayer() {
   const { image } = site.recognize;
+  const reduceMotion = useReducedMotion();
 
   return (
     <>
       <div className="relative mb-2 h-64 overflow-hidden sm:h-72 lg:hidden">
-        <div className="absolute top-0 left-1/2 h-[200%] w-[min(100%,28rem)] -translate-x-1/2">
+        <motion.div
+          className="absolute top-0 left-1/2 h-[200%] w-[min(100%,28rem)] -translate-x-1/2"
+          initial={reduceMotion ? false : { scale: 1.06 }}
+          whileInView={{ scale: 1 }}
+          viewport={motionViewport}
+          transition={{ duration: 1.1, ease: motionEase }}
+        >
           <Image
             src={image.src}
             alt={image.alt}
@@ -24,12 +35,18 @@ export function RecognizePlayer() {
             sizes="100vw"
             className="object-contain object-top"
           />
-        </div>
+        </motion.div>
         <PlayerFade />
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-0 hidden overflow-hidden lg:block">
-        <div className="absolute top-0 left-1/2 aspect-[3/4] h-[168%] -translate-x-1/2">
+        <motion.div
+          className="absolute top-0 left-1/2 aspect-[3/4] h-[168%] -translate-x-1/2"
+          initial={reduceMotion ? false : { scale: 1.06 }}
+          whileInView={{ scale: 1 }}
+          viewport={motionViewport}
+          transition={{ duration: 1.1, ease: motionEase }}
+        >
           <Image
             src={image.src}
             alt=""
@@ -37,7 +54,7 @@ export function RecognizePlayer() {
             sizes="50vw"
             className="object-contain object-top"
           />
-        </div>
+        </motion.div>
         <PlayerFade />
       </div>
     </>

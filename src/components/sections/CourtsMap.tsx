@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { site } from "@/src/content/site";
 import { Button } from "@/src/components/ui/Button";
 import {
@@ -9,6 +10,7 @@ import {
   yandexWidgetUrl,
   type YMapsPlacemark,
 } from "@/src/lib/ymaps";
+import { Stagger, StaggerItem, motionEase } from "@/src/components/ui/Reveal";
 
 type Court = (typeof site.courts.items)[number];
 
@@ -40,11 +42,16 @@ function CourtCard({ court, className }: { court: Court; className?: string }) {
   const { courtCta } = site.courts;
 
   return (
-    <article
+    <motion.article
+      layout
       className={clsx(
         "flex w-full max-w-[26rem] flex-col rounded-[20px] border-[1.5px] border-ball bg-ink p-6 text-line md:p-7",
         className,
       )}
+      initial={{ scale: 0.98, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.98, opacity: 0 }}
+      transition={{ duration: 0.35, ease: motionEase }}
     >
       <h3 className="text-h3 text-ball">{court.name}</h3>
       <p className="mt-3 text-body text-line/85">
@@ -59,7 +66,7 @@ function CourtCard({ court, className }: { court: Court; className?: string }) {
           {courtCta.label}
         </Button>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
@@ -73,26 +80,34 @@ function CourtChips({
   onSelect: (id: string) => void;
 }) {
   return (
-    <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+    <Stagger className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
       {items.map((court) => {
         const active = court.id === selectedId;
         return (
-          <button
-            key={court.id}
-            type="button"
-            onClick={() => onSelect(court.id)}
-            className={clsx(
-              "shrink-0 rounded-full px-4 py-2 text-[15px] font-semibold uppercase tracking-[0.04em] transition-colors duration-150",
-              active
-                ? "bg-ball text-ink"
-                : "bg-transparent text-line shadow-[0_0_0_1.5px_rgba(255,255,255,0.7)] hover:bg-line hover:text-ink",
-            )}
-          >
-            {court.name}
-          </button>
+          <StaggerItem key={court.id} className="shrink-0">
+            <button
+              type="button"
+              onClick={() => onSelect(court.id)}
+              className={clsx(
+                "relative shrink-0 rounded-full px-4 py-2 text-[15px] font-semibold uppercase tracking-[0.04em] transition-colors duration-150",
+                active
+                  ? "text-ink"
+                  : "bg-transparent text-line shadow-[0_0_0_1.5px_rgba(255,255,255,0.7)] hover:bg-line hover:text-ink",
+              )}
+            >
+              {active ? (
+                <motion.span
+                  layoutId="court-chip"
+                  className="absolute inset-0 rounded-full bg-ball"
+                  transition={{ duration: 0.35, ease: motionEase }}
+                />
+              ) : null}
+              <span className="relative z-10">{court.name}</span>
+            </button>
+          </StaggerItem>
         );
       })}
-    </div>
+    </Stagger>
   );
 }
 
@@ -219,13 +234,17 @@ export function CourtsMap() {
         ) : null}
         <div className="pointer-events-none absolute inset-0 hidden p-5 md:p-6 lg:flex lg:items-start lg:justify-start">
           <div className="pointer-events-auto">
-            <CourtCard court={selected} />
+            <AnimatePresence mode="wait">
+              <CourtCard key={selected.id} court={selected} />
+            </AnimatePresence>
           </div>
         </div>
       </div>
 
       <div className="lg:hidden">
-        <CourtCard court={selected} className="max-w-none" />
+        <AnimatePresence mode="wait">
+          <CourtCard key={selected.id} court={selected} className="max-w-none" />
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { Button } from "@/src/components/ui/Button";
 import { Container } from "@/src/components/ui/Container";
 import { Section } from "@/src/components/ui/Section";
 import { SectionHeading } from "@/src/components/ui/SectionHeading";
+import { Reveal } from "@/src/components/ui/Reveal";
 
 export function Courts() {
   const { title, lead, note, telegramCta, cta } = site.courts;
@@ -11,16 +12,18 @@ export function Courts() {
   return (
     <Section id="courts" tone="ink">
       <Container>
-        <SectionHeading
-          title={title}
-          lead={lead}
-          tone="dark"
-          align="center"
-        />
-        <div className="mt-10 md:mt-14">
+        <Reveal>
+          <SectionHeading
+            title={title}
+            lead={lead}
+            tone="dark"
+            align="center"
+          />
+        </Reveal>
+        <Reveal className="mt-10 md:mt-14">
           <CourtsMap />
-        </div>
-        <div className="mt-10 flex flex-col items-center gap-6 text-center md:mt-12">
+        </Reveal>
+        <Reveal className="mt-10 flex flex-col items-center gap-6 text-center md:mt-12">
           <p className="max-w-[46ch] text-lead text-line/80">{note}</p>
           <div className="flex w-full flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
             <Button
@@ -38,7 +41,7 @@ export function Courts() {
               {cta.label}
             </Button>
           </div>
-        </div>
+        </Reveal>
       </Container>
     </Section>
   );

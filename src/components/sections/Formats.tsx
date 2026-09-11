@@ -1,10 +1,19 @@
+"use client";
+
 import Image from "next/image";
 import clsx from "clsx";
+import { motion, useReducedMotion } from "framer-motion";
 import { site } from "@/src/content/site";
 import { Button } from "@/src/components/ui/Button";
 import { Container } from "@/src/components/ui/Container";
 import { Section } from "@/src/components/ui/Section";
 import { SectionHeading } from "@/src/components/ui/SectionHeading";
+import {
+  Reveal,
+  motionEase,
+  motionViewport,
+  useHoverMotion,
+} from "@/src/components/ui/Reveal";
 
 type Format = (typeof site.formats.items)[number];
 
@@ -15,13 +24,17 @@ function FormatCard({
   format: Format;
   reverse: boolean;
 }) {
+  const reduceMotion = useReducedMotion();
+  const hover = useHoverMotion();
+
   return (
     <article className="grid min-h-[min(70svh,46rem)] w-full min-w-0 overflow-hidden rounded-[28px] bg-ink text-line lg:min-h-[70svh] lg:grid-cols-2">
-      <div
+      <Reveal
         className={clsx(
           "flex min-w-0 flex-col justify-center px-4 py-8 sm:px-10 md:px-12 lg:px-16 xl:px-[4.5rem] @container",
           reverse && "lg:order-2",
         )}
+        x={reverse ? 20 : -20}
       >
         <h3 className="text-[min(3.15rem,8.1cqw)] font-extrabold tracking-[-0.04em] text-ball">
           {format.title}
@@ -42,22 +55,36 @@ function FormatCard({
             {format.cta.label}
           </Button>
         </div>
-      </div>
+      </Reveal>
 
       <div
         className={clsx(
-          "relative min-h-[42svh] min-w-0 bg-ink md:min-h-[48svh] lg:min-h-0",
+          "relative min-h-[42svh] min-w-0 overflow-hidden bg-ink md:min-h-[48svh] lg:min-h-0",
           reverse && "lg:order-1",
         )}
       >
-        <Image
-          src={format.image.src}
-          alt={format.image.alt}
-          fill
-          quality={95}
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover object-center"
-        />
+        <motion.div
+          className="absolute inset-0"
+          initial={reduceMotion ? false : { scale: 1.08 }}
+          whileInView={{ scale: 1 }}
+          viewport={motionViewport}
+          transition={{ duration: 1.1, ease: motionEase }}
+        >
+          <motion.div
+            className="relative h-full w-full"
+            whileHover={hover ? { scale: 1.04 } : undefined}
+            transition={{ duration: 0.45, ease: motionEase }}
+          >
+            <Image
+              src={format.image.src}
+              alt={format.image.alt}
+              fill
+              quality={95}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover object-center"
+            />
+          </motion.div>
+        </motion.div>
       </div>
     </article>
   );
@@ -69,13 +96,15 @@ export function Formats() {
   return (
     <Section id="formats" tone="line">
       <Container>
-        <SectionHeading
-          title={title}
-          lead={lead}
-          tone="light"
-          align="center"
-          stroke="none"
-        />
+        <Reveal>
+          <SectionHeading
+            title={title}
+            lead={lead}
+            tone="light"
+            align="center"
+            stroke="none"
+          />
+        </Reveal>
         <div className="mt-10 flex flex-col gap-5 md:mt-14 md:gap-6">
           {items.map((format, index) => (
             <FormatCard

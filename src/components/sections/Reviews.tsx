@@ -8,6 +8,7 @@ import { site } from "@/src/content/site";
 import { Container } from "@/src/components/ui/Container";
 import { Section } from "@/src/components/ui/Section";
 import { SectionHeading } from "@/src/components/ui/SectionHeading";
+import { Reveal, motionEase } from "@/src/components/ui/Reveal";
 
 export function Reviews() {
   const { title, lead, background, items } = site.reviews;
@@ -55,7 +56,7 @@ export function Reviews() {
   }, []);
 
   return (
-    <Section id="reviews" tone="ink" className="relative pb-28 md:pb-32">
+    <Section id="reviews" tone="ink" className="relative">
       <Image
         src={background}
         alt=""
@@ -66,8 +67,10 @@ export function Reviews() {
       />
       <div className="absolute inset-0 bg-ink/55" />
       <Container className="relative z-10">
-        <SectionHeading title={title} lead={lead} tone="dark" align="center" />
-        <div className="relative mt-10 md:mt-12">
+        <Reveal>
+          <SectionHeading title={title} lead={lead} tone="dark" align="center" />
+        </Reveal>
+        <Reveal className="relative mt-10 md:mt-12">
           <div
             ref={scrollerRef}
             className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -97,27 +100,31 @@ export function Reviews() {
             ))}
           </div>
 
-          <button
+          <motion.button
             type="button"
             aria-label="Предыдущий отзыв"
             onClick={() => go(-1)}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2, ease: motionEase }}
             className="absolute top-[42%] left-1 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-ball text-ink shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
           >
             <ChevronLeft strokeWidth={1.75} className="h-6 w-6" />
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             type="button"
             aria-label="Следующий отзыв"
             onClick={() => go(1)}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2, ease: motionEase }}
             className="absolute top-[42%] right-1 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-ball text-ink shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
           >
             <ChevronRight strokeWidth={1.75} className="h-6 w-6" />
-          </button>
+          </motion.button>
 
           <p className="mt-5 text-center text-small text-line/70">
             {index + 1} / {items.length}
           </p>
-        </div>
+        </Reveal>
       </Container>
     </Section>
   );

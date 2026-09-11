@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { site } from "@/src/content/site";
 import { Button } from "@/src/components/ui/Button";
 import { Container } from "@/src/components/ui/Container";
@@ -13,6 +14,7 @@ import {
   formatPhone,
   phoneDigits,
 } from "@/src/components/ui/QuizField";
+import { Reveal, motionEase } from "@/src/components/ui/Reveal";
 
 type Answers = {
   level: string;
@@ -45,6 +47,7 @@ export function Signup() {
   );
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const placeOptions = useMemo(
     () => [
@@ -120,16 +123,26 @@ export function Signup() {
   return (
     <Section id="signup" tone="ball">
       <Container>
-        <SectionHeading
-          title={quiz.title}
-          lead={quiz.lead}
-          tone="light"
-          align="center"
-          titleClassName="mx-auto max-w-[12ch] text-[clamp(1.45rem,6.2vw,3rem)] [text-wrap:wrap]"
-        />
+        <Reveal>
+          <SectionHeading
+            title={quiz.title}
+            lead={quiz.lead}
+            tone="light"
+            align="center"
+            titleClassName="mx-auto max-w-[12ch] text-[clamp(1.45rem,6.2vw,3rem)] [text-wrap:wrap]"
+          />
+        </Reveal>
         <div className="mx-auto mt-12 w-full max-w-xl">
+          <AnimatePresence mode="wait">
           {done ? (
-            <div className="rounded-[28px] bg-line p-8 text-center text-ink md:p-12">
+            <motion.div
+              key="success"
+              className="rounded-[28px] bg-line p-8 text-center text-ink md:p-12"
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.45, ease: motionEase }}
+            >
               <h3 className="text-h3">
                 {quiz.successTitle.replace("{name}", answers.name.trim() || "друг")}
               </h3>
@@ -141,9 +154,16 @@ export function Signup() {
                   {quiz.successTelegram.label}
                 </Button>
               </div>
-            </div>
+            </motion.div>
           ) : (
-            <div className="rounded-[28px] bg-line/80 p-6 text-ink md:p-10">
+            <motion.div
+              key={step}
+              className="rounded-[28px] bg-line/80 p-6 text-ink md:p-10"
+              initial={reduceMotion ? false : { opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -24 }}
+              transition={{ duration: 0.4, ease: motionEase }}
+            >
               <p className="text-small font-medium uppercase tracking-[0.04em]">
                 {stepLabel}
               </p>
@@ -287,8 +307,9 @@ export function Signup() {
                   Назад
                 </button>
               ) : null}
-            </div>
+            </motion.div>
           )}
+          </AnimatePresence>
           {!done ? (
             <p className="mt-6 text-center text-small text-ink/70">{quiz.note}</p>
           ) : null}
